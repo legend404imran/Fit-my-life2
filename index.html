@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0A0E14">
+<meta name="description" content="Fit My Life — your complete offline personal fitness companion">
+<title>Fit My Life</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fit My Life">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/screens.css">
+<link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== SPLASH ===================== -->
+  <div id="splash" class="splash">
+    <div class="splash-ring"></div>
+    <div class="splash-logo">Fit<span>My</span>Life</div>
+    <div class="splash-sub">Your body. Your data. Your rules.</div>
+  </div>
+
+  <!-- ===================== ONBOARDING ===================== -->
+  <div id="onboarding" class="screen onboarding hidden">
+    <div class="onboard-wrap">
+      <div class="onboard-progress"><div id="onboardBar" class="onboard-progress-fill"></div></div>
+      <div id="onboardSteps"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header id="topbar" class="topbar hidden">
+    <button id="btnMenu" class="icon-btn" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <button id="btnSearch" class="icon-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main id="mainContent" class="main-content hidden">
+
+    <!-- ---------- DASHBOARD ---------- -->
+    <section id="screen-dashboard" class="screen">
+      <div class="dash-greeting">
+        <div class="dash-date" id="dashDate">Monday, Aug 3</div>
+        <h1 class="dash-hello" id="dashHello">Good morning, Champ</h1>
+        <p class="dash-quote" id="dashQuote">"Discipline is choosing between what you want now and what you want most."</p>
+      </div>
+
+      <div class="ring-hero card glass">
+        <svg id="ringSvg" viewBox="0 0 240 240" class="ring-svg">
+          <circle class="ring-track" cx="120" cy="120" r="104"/>
+          <circle id="ringCal" class="ring-prog ring-cal" cx="120" cy="120" r="104"/>
+          <circle class="ring-track" cx="120" cy="120" r="78"/>
+          <circle id="ringProt" class="ring-prog ring-prot" cx="120" cy="120" r="78"/>
+          <circle class="ring-track" cx="120" cy="120" r="52"/>
+          <circle id="ringWater" class="ring-prog ring-water" cx="120" cy="120" r="52"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-big" id="ringCalLeft">0</div>
+          <div class="ring-label">kcal left</div>
+        </div>
+        <div class="ring-legend">
+          <div class="legend-item"><span class="dot dot-cal"></span>Calories <b id="legCal">0/0</b></div>
+          <div class="legend-item"><span class="dot dot-prot"></span>Protein <b id="legProt">0/0g</b></div>
+          <div class="legend-item"><span class="dot dot-water"></span>Water <b id="legWater">0/0ml</b></div>
+        </div>
+      </div>
+
+      <div class="quickstats-grid" id="quickStatsGrid"></div>
+
+      <div class="dash-section">
+        <div class="section-head"><h3>Today's Goal</h3></div>
+        <div class="card glass goal-card" id="goalCard"></div>
+      </div>
+
+      <div class="dash-section">
+        <div class="section-head"><h3>Streaks</h3></div>
+        <div class="streak-row" id="streakRow"></div>
+      </div>
+
+      <div class="dash-section">
+        <div class="section-head"><h3>This Week</h3><a class="link-more" data-nav="progress">See all</a></div>
+        <canvas id="weekChart" class="mini-chart" height="120"></canvas>
+      </div>
+
+      <div class="dash-section">
+        <div class="section-head"><h3>Up Next</h3></div>
+        <div class="card glass" id="upNextCard"></div>
+      </div>
+
+      <div class="dash-section">
+        <div class="section-head"><h3>Health Tip</h3></div>
+        <div class="card glass tip-card" id="tipCard"></div>
+      </div>
+    </section>
+
+    <!-- ---------- FOOD ---------- -->
+    <section id="screen-food" class="screen hidden">
+      <div class="macro-summary card glass" id="macroSummary"></div>
+      <div class="meal-tabs" id="mealTabs">
+        <button class="meal-tab active" data-meal="breakfast">Breakfast</button>
+        <button class="meal-tab" data-meal="lunch">Lunch</button>
+        <button class="meal-tab" data-meal="dinner">Dinner</button>
+        <button class="meal-tab" data-meal="snacks">Snacks</button>
+      </div>
+      <div id="mealList" class="meal-list"></div>
+      <button class="btn-add-block" id="btnAddFood">+ Add Food</button>
+      <div class="section-head"><h3>Favorites</h3></div>
+      <div class="chip-row" id="favFoodsRow"></div>
+    </section>
+
+    <!-- ---------- WATER ---------- -->
+    <section id="screen-water" class="screen hidden">
+      <div class="water-hero card glass">
+        <svg viewBox="0 0 160 200" class="bottle-svg">
+          <defs>
+            <clipPath id="bottleClip"><path d="M50 10h60v20l15 20v130a10 10 0 0 1-10 10H45a10 10 0 0 1-10-10V50l15-20z"/></clipPath>
+          </defs>
+          <path class="bottle-outline" d="M50 10h60v20l15 20v130a10 10 0 0 1-10 10H45a10 10 0 0 1-10-10V50l15-20z"/>
+          <rect id="waterFill" class="bottle-fill" x="0" y="200" width="160" height="200" clip-path="url(#bottleClip)"/>
+        </svg>
+        <div class="water-amount"><span id="waterCur">0</span><small>/ <span id="waterGoal">2500</span> ml</small></div>
+      </div>
+      <div class="water-quick-grid" id="waterQuickGrid"></div>
+      <div class="water-custom-row">
+        <input type="number" id="waterCustomInput" placeholder="Custom ml" class="input">
+        <button id="waterCustomBtn" class="btn-primary">Add</button>
+      </div>
+      <div class="section-head"><h3>Today's Log</h3></div>
+      <div id="waterLog" class="log-list"></div>
+      <div class="section-head"><h3>Last 7 Days</h3></div>
+      <canvas id="waterChart" class="mini-chart" height="120"></canvas>
+    </section>
+
+    <!-- ---------- WORKOUT ---------- -->
+    <section id="screen-workout" class="screen hidden">
+      <div class="workout-actions">
+        <button class="btn-primary" id="btnNewWorkout">+ New Workout</button>
+        <button class="btn-ghost" id="btnExerciseLib">Exercise Library</button>
+      </div>
+      <div class="section-head"><h3>Today</h3></div>
+      <div id="todayWorkouts" class="workout-list"></div>
+      <div class="section-head"><h3>Templates</h3></div>
+      <div class="chip-row" id="workoutTemplates"></div>
+      <div class="section-head"><h3>Personal Records</h3></div>
+      <div id="prList" class="pr-list"></div>
+      <div class="section-head"><h3>Frequency (30 days)</h3></div>
+      <canvas id="workoutFreqChart" class="mini-chart" height="120"></canvas>
+    </section>
+
+    <!-- ---------- PROGRESS ---------- -->
+    <section id="screen-progress" class="screen hidden">
+      <div class="progress-tabs" id="progressTabs">
+        <button class="ptab active" data-p="weight">Weight</button>
+        <button class="ptab" data-p="bmi">BMI</button>
+        <button class="ptab" data-p="body">Measurements</button>
+        <button class="ptab" data-p="photos">Photos</button>
+      </div>
+      <div id="progressPanel"></div>
+    </section>
+
+    <!-- ---------- SLEEP ---------- -->
+    <section id="screen-sleep" class="screen hidden">
+      <div class="card glass" id="sleepEntryCard"></div>
+      <div class="section-head"><h3>Last 7 Nights</h3></div>
+      <canvas id="sleepChart" class="mini-chart" height="120"></canvas>
+      <div class="section-head"><h3>History</h3></div>
+      <div id="sleepHistory" class="log-list"></div>
+    </section>
+
+    <!-- ---------- HABITS ---------- -->
+    <section id="screen-habits" class="screen hidden">
+      <button class="btn-add-block" id="btnAddHabit">+ New Habit</button>
+      <div id="habitList" class="habit-list"></div>
+    </section>
+
+    <!-- ---------- MOOD ---------- -->
+    <section id="screen-mood" class="screen hidden">
+      <div class="card glass mood-picker" id="moodPicker"></div>
+      <div class="section-head"><h3>This Month</h3></div>
+      <canvas id="moodChart" class="mini-chart" height="140"></canvas>
+      <div class="section-head"><h3>History</h3></div>
+      <div id="moodHistory" class="log-list"></div>
+    </section>
+
+    <!-- ---------- NOTES ---------- -->
+    <section id="screen-notes" class="screen hidden">
+      <input type="text" id="notesSearch" class="input" placeholder="Search notes...">
+      <button class="btn-add-block" id="btnAddNote">+ New Note</button>
+      <div id="notesList" class="notes-grid"></div>
+    </section>
+
+    <!-- ---------- CALENDAR ---------- -->
+    <section id="screen-calendar" class="screen hidden">
+      <div class="cal-header">
+        <button id="calPrev" class="icon-btn">‹</button>
+        <div id="calMonthLabel" class="cal-month-label"></div>
+        <button id="calNext" class="icon-btn">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="section-head"><h3 id="calDayTitle">Select a date</h3></div>
+      <div id="calDayDetail" class="card glass"></div>
+    </section>
+
+    <!-- ---------- REPORTS ---------- -->
+    <section id="screen-reports" class="screen hidden">
+      <div class="report-tabs" id="reportTabs">
+        <button class="rtab active" data-r="daily">Daily</button>
+        <button class="rtab" data-r="weekly">Weekly</button>
+        <button class="rtab" data-r="monthly">Monthly</button>
+        <button class="rtab" data-r="yearly">Yearly</button>
+      </div>
+      <div id="reportPanel" class="card glass"></div>
+      <div class="report-export-row">
+        <button class="btn-ghost" id="btnExportCSV">Export CSV</button>
+        <button class="btn-ghost" id="btnExportJSON">Export JSON</button>
+        <button class="btn-ghost" id="btnPrintReport">Print / PDF</button>
+      </div>
+    </section>
+
+    <!-- ---------- PROFILE ---------- -->
+    <section id="screen-profile" class="screen hidden">
+      <div class="card glass" id="profileForm"></div>
+    </section>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <section id="screen-settings" class="screen hidden">
+      <div id="settingsPanel"></div>
+    </section>
+
+  </main>
+
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav id="bottomNav" class="bottom-nav hidden">
+    <button class="nav-item active" data-nav="dashboard">
+      <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><span>Home</span>
+    </button>
+    <button class="nav-item" data-nav="food">
+      <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg><span>Food</span>
+    </button>
+    <button class="nav-item" data-nav="workout">
+      <svg viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M4 12h2M18 12h2M6 4v4M6 16v4M18 4v4M18 16v4"/></svg><span>Train</span>
+    </button>
+    <button class="nav-item nav-fab" data-nav="fab">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="nav-item" data-nav="progress">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-6 3 4 5-8"/></svg><span>Progress</span>
+    </button>
+    <button class="nav-item" data-nav="more">
+      <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg><span>More</span>
+    </button>
+  </nav>
+
+  <!-- ===================== SIDE MENU ===================== -->
+  <div id="sideMenuOverlay" class="overlay hidden"></div>
+  <aside id="sideMenu" class="side-menu">
+    <div class="side-menu-profile">
+      <div class="avatar" id="sideAvatar">F</div>
+      <div>
+        <div class="side-name" id="sideName">Your Name</div>
+        <div class="side-goal" id="sideGoal">Set your goal</div>
+      </div>
+    </div>
+    <div class="side-links">
+      <button data-nav="dashboard" class="side-link">Dashboard</button>
+      <button data-nav="food" class="side-link">Food Tracker</button>
+      <button data-nav="water" class="side-link">Water Tracker</button>
+      <button data-nav="workout" class="side-link">Workout Tracker</button>
+      <button data-nav="progress" class="side-link">Progress</button>
+      <button data-nav="sleep" class="side-link">Sleep Tracker</button>
+      <button data-nav="habits" class="side-link">Habit Tracker</button>
+      <button data-nav="mood" class="side-link">Mood Tracker</button>
+      <button data-nav="notes" class="side-link">Notes & Journal</button>
+      <button data-nav="calendar" class="side-link">Calendar</button>
+      <button data-nav="reports" class="side-link">Reports</button>
+      <button data-nav="profile" class="side-link">Profile</button>
+      <button data-nav="settings" class="side-link">Settings</button>
+    </div>
+  </aside>
+
+  <!-- ===================== MORE SHEET ===================== -->
+  <div id="moreSheetOverlay" class="overlay hidden"></div>
+  <div id="moreSheet" class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-grid">
+      <button data-nav="sleep" class="sheet-item"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Sleep</button>
+      <button data-nav="habits" class="sheet-item"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Habits</button>
+      <button data-nav="mood" class="sheet-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>Mood</button>
+      <button data-nav="notes" class="sheet-item"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 9h8M8 13h5"/></svg>Notes</button>
+      <button data-nav="calendar" class="sheet-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Calendar</button>
+      <button data-nav="reports" class="sheet-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-6 3 4 5-8"/></svg>Reports</button>
+      <button data-nav="water" class="sheet-item"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12a7 7 0 1 1-14 0c0-4.5 7-12 7-12z"/></svg>Water</button>
+      <button data-nav="profile" class="sheet-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>Profile</button>
+      <button data-nav="settings" class="sheet-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+    </div>
+  </div>
+
+  <!-- ===================== QUICK ADD SHEET (FAB) ===================== -->
+  <div id="fabSheetOverlay" class="overlay hidden"></div>
+  <div id="fabSheet" class="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <h3 class="sheet-title">Quick Add</h3>
+    <div class="sheet-grid">
+      <button class="sheet-item" id="qaWater"><svg viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12a7 7 0 1 1-14 0c0-4.5 7-12 7-12z"/></svg>Water</button>
+      <button class="sheet-item" id="qaFood"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>Food</button>
+      <button class="sheet-item" id="qaWorkout"><svg viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M4 12h2M18 12h2M6 4v4M6 16v4M18 4v4M18 16v4"/></svg>Workout</button>
+      <button class="sheet-item" id="qaWeight"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>Weight</button>
+      <button class="sheet-item" id="qaNote"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 9h8M8 13h5"/></svg>Note</button>
+      <button class="sheet-item" id="qaMood"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>Mood</button>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL ROOT ===================== -->
+  <div id="modalOverlay" class="overlay hidden"></div>
+  <div id="modalRoot" class="modal hidden"></div>
+
+  <!-- ===================== TOAST ===================== -->
+  <div id="toastRoot" class="toast-root"></div>
+
+  <!-- ===================== INSTALL BANNER ===================== -->
+  <div id="installBanner" class="install-banner hidden">
+    <span>Install Fit My Life for the full app experience</span>
+    <button id="btnInstall" class="btn-primary btn-sm">Install</button>
+    <button id="btnDismissInstall" class="icon-btn">✕</button>
+  </div>
+
+</div>
+
+<script src="js/db.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/exercises-data.js"></script>
+<script src="js/quotes-data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/onboarding.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/food.js"></script>
+<script src="js/water.js"></script>
+<script src="js/workout.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/sleep.js"></script>
+<script src="js/habits.js"></script>
+<script src="js/mood.js"></script>
+<script src="js/notes.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/reports.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/search.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
